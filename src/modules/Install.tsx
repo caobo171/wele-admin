@@ -8,6 +8,7 @@ class Install extends React.Component{
     }
     handleSubmit= ()=>{
        window.location.href = `/shopify/auth?shop=${this.state.shop}`
+       localStorage.setItem('shop',JSON.stringify(this.state.shop))
     }
     handleOnChange = (e:any)=>{
         this.setState({[e.target.name]:e.target.value})

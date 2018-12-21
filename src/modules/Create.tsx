@@ -9,17 +9,22 @@ class Create extends React.Component{
         result:''
     }
     onClickHandle = ()=>{
+
+        const query = new URLSearchParams(location.search)
+        const shop = query.get('shop')
+        console.log('check',shop)
         console.log('check',this.state)
         switch(this.state.type){
             case 'GET':
-               axios.get(`/api/${this.state.request}`).then(data=>{
+               axios.get(`/api${this.state.request}`).then(data=>{
                    this.setState({data})
                })
                break;
             case 'POST':
                 //const datatoSend = JSON.parse(this.state.data)
                 if(true){
-                    axios.post(`/api/${this.state.request}`).then(data=>{
+                    console.log('check okkkk',shop)
+                    axios.post(`/api/${this.state.request}`,{shop:shop}).then(data=>{
                         this.setState({data})
                     })
                 }
