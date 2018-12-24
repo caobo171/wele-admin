@@ -62,10 +62,8 @@ class MainView extends React.Component {
 
   handleMouseDown = (e:any) =>{
     e.preventDefault()
-    console.log('check',e.target)
-    window.tar = e.target
     if(e.target.id==='boundingbox2'){
-      console.log('BIEN MAT DI NAO')
+
       this.setState({box2:{
         left:0,
         top:0,
@@ -75,11 +73,11 @@ class MainView extends React.Component {
       }})
     }else{
       pageContainer.setState({target:e.target as HTMLElement},()=>{
-        console.log('check',pageContainer.state.target)
+        console.log('check TARGET',pageContainer.state.target)
      //   pageContainer.state.target.style.color= 'red'
       })
       let box2 = (e.target as HTMLElement).getBoundingClientRect()
-      console.log('check',(this.window as Window).scrollY)
+     // console.log('check',(this.window as Window).scrollY)
       //box.top = box.top+ (this.window as Window).scrollY
   
       this.setState({box2:{

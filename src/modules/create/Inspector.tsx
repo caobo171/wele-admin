@@ -1,7 +1,7 @@
 import React from 'react';
 import { SketchPicker } from 'react-color';
 import { pageContainer } from '../../containers/PageContainer-x'
-import { SubscribeOne } from 'unstated-x'
+import { SubscribeOne, Subscribe } from 'unstated-x'
 
 class Inspector extends React.Component {
 
@@ -27,17 +27,20 @@ class Inspector extends React.Component {
                 return (
                     <React.Fragment>
                         {
-                            pageContainer.state.target.innerText ?
-                                (
+                            <Subscribe to={[pageContainer]}>
+                                {
+                                    pageContainer => {
+                                        return (
+                                            <textarea value={text} onChange={e => {
+                                                pageContainer.state.target.innerText = e.target.value
+                                                this.setState({ text: e.target.value }, () => {
 
-                                    <textarea value={text} onChange={e => { 
-                                        pageContainer.state.target.innerText = e.target.value
-                                        this.setState({ text: e.target.value }, () => {
-                                           
-                                        })
-                                    }}></textarea>
-                                ) :
-                                (<h1>This element has no text</h1>)
+                                                })
+                                            }}></textarea>
+                                        )
+                                    }
+                                }
+                            </Subscribe>
                         }
                     </React.Fragment>
 
@@ -48,22 +51,29 @@ class Inspector extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
-                <select value={this.state.mode} onChange={e => this.setState({ mode: e.target.value })}>
-                    <option value="color">Color</option>
-                    <option value="backgroundColor">BackgroundColor</option>
-                    <option value="text">Text</option>
-                </select>
-                <React.Fragment>
-                    {pageContainer.state.target && (
+            <Subscribe to={[pageContainer]}>
+                {pageContainer => {
+                    return (
                         <React.Fragment>
-                            {this.renderInspector()}
+                            {pageContainer.state.target && (
+                                <React.Fragment>
+                                    <h3>Inspector</h3>
+                                    <select value={this.state.mode} onChange={e => this.setState({ mode: e.target.value })}>
+                                        <option value="color">Color</option>
+                                        <option value="backgroundColor">BackgroundColor</option>
+                                        <option value="text">Text</option>
+                                    </select>
+
+                                    <React.Fragment>
+                                        {this.renderInspector()}
+                                    </React.Fragment>
+                                </React.Fragment>
+                            ) }
                         </React.Fragment>
                     )
+                }}
+            </Subscribe>
 
-                    }
-                </React.Fragment>
-            </React.Fragment>
 
         )
     }
