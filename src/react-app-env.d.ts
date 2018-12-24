@@ -57,3 +57,21 @@ declare module '*.module.sass' {
   const classes: { [key: string]: string };
   export default classes;
 }
+
+
+declare var __webpack_public_path__: string
+// tslint:disable-next-line
+interface Window {
+	[key: string]: any
+}
+
+declare module 'react-color'
+
+declare module 'tinycolor2'
+
+declare module  '@mapbox/react-colorpickr'
+
+declare module '*.css' {
+  const styles: any;
+  export = styles;
+}
