@@ -15,7 +15,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "lib": [
-      "es2017",
+      "es2018",
       "dom",
       "esnext.asynciterable"
     ]
