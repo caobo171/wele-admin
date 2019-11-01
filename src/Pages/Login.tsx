@@ -24,7 +24,8 @@ const Login = (props: Props) => {
 
             const user = {
                 displayName : result.user.displayName,
-                id: result.user.uid
+                id: result.user.uid,
+                imgUrl: result.user.photoURL
             }
 
             props.onLoginUser(user)
