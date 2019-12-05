@@ -77,11 +77,7 @@ const Login = () => {
         }
     }, [user])
 
-    useEffectOnce(()=>{
-        if(!user){
-            getUser()
-        }  
-    })
+
 
     const onLoginHandler = () => login()
 

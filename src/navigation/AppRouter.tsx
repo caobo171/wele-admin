@@ -5,6 +5,11 @@ import Login from '@/Pages/Login'
 import AddPodcast from '@/Pages/AddPodcast'
 import { useUser } from '@/store/user/hooks'
 import { ReactComponent } from '*.svg'
+import PodcastList from '@/Pages/PodcastList'
+import { useEffectOnce } from 'react-use'
+import { getPodcasts } from '@/store/podcast/functions'
+import { getUser } from '@/store/user/functions'
+import UserList from '@/Pages/UserList'
 
 
 
@@ -15,8 +20,21 @@ const PrivateRoute: React.FC<{
     const user = useUser()
     return <Route {...rest} render={props => {
         const Component = component;
-        // return user ? <Component {...props} /> : <Redirect to={'/login'} />
-        return <Component {...props} />
+        return user && (user.role === 'admin' || user.role === 'root') ? <Component {...props} /> : <Redirect to={'/login'} />
+        // return <Component {...props} />
+    }} />
+}
+
+
+const RootRoute: React.FC<{
+    component: React.ComponentType<any>,
+    [prop: string]: any
+}> = ({ component, ...rest }) => {
+    const user = useUser()
+    return <Route {...rest} render={props => {
+        const Component = component;
+        return user && (user.role === 'root') ? <Component {...props} /> : <Redirect to={'/login'} />
+        // return <Component {...props} />
     }} />
 }
 
@@ -56,12 +74,19 @@ window.router = AppRouterContext
 
 const AppRouter = () => {
 
+    useEffectOnce(()=>{
+        getPodcasts()
+        getUser()
+    })
+
     return (
         <Router>
             <RouterContext>
                 <Switch>
                     <Route path={'/login'} component={Login} />
-                    <PrivateRoute path={'/'} component={AddPodcast} />
+                    <PrivateRoute path={'/add'} component={AddPodcast} />
+                    <RootRoute path={'/userlist'} component={UserList} />
+                    <PrivateRoute path={'/'} component={PodcastList} />      
                 </Switch>
             </RouterContext>
         </Router>

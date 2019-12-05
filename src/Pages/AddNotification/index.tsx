@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as firebase from 'firebase/app'
 import { toast } from 'react-toastify'
 import { useEffectOnce } from "react-use"
-import { listPodcast } from '@store/podcast/functions';
+import { getPodcasts } from '@store/podcast/functions';
+import { usePodcastList } from '@/store/podcast/hooks';
 
 interface Props {
     user: any
@@ -32,11 +33,7 @@ const PodcastAddForm = (props: Props) => {
     const [notificationType, setNotificationType] = useState<"unknown" | "weekly_podcast">('unknown')
 
 
-
-    useEffectOnce(() => {
-
-        listPodcast()
-    })
+    
 
     const onSubmitHandler = async (e: any) => {
     }

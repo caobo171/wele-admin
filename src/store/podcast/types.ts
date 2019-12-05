@@ -8,8 +8,9 @@ export interface PodcastType{
     postDate: Date,
     description: string,
     fileSize: number,
-    uri?: string
-    id?: string
+    downloadLink: string,
+    id?: string,
+    hint?:string
 }
 
 export interface State {

@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as firebase from 'firebase/app'
 import { toast } from 'react-toastify'
 import { useEffectOnce } from "react-use"
-import { listPodcast } from '@store/podcast/functions';
+import { getPodcasts, addPodcast, deletePodcast } from '@store/podcast/functions';
 import styled from 'styled-components'
 import SelectControl from '@/components/SelectControl';
 import SelectUser, { NarratorType } from '@/components/SelecUser';
 import { useUser } from '@/store/user/hooks';
 import SelectImage from '@/components/SelectImage';
 import { PodcastType } from '@/store/podcast/types';
+import { usePodcastList, usePodcastById } from '@/store/podcast/hooks';
+import { AppRouterContext } from '@/navigation/AppRouter';
+import { editPodcast } from '@/store/podcast/functions';
 
 
 interface Props {
@@ -32,8 +35,21 @@ const StyledBackToPodcastList = styled.div`
     margin-left: 80px;
     font-size: 16px;
     background-color: #595959;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 22px;
+    color: #fff;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.6;
+    }
+`
+
+const StyledDeletePodcast = styled.div`
+    margin-right: 80px;
+    font-size: 16px;
+    background-color: #595959;
+    padding: 14px;
+    border-radius: 22px;
     color: #fff;
     cursor: pointer;
     &:hover {
@@ -82,7 +98,7 @@ const StyledTextArea = styled.textarea`
     border-color: rgba(0,0,0,0.1);
     border-width: 2px;
     width: 400px;
-    height: 413px;
+    height: 200px;
     outline: none;
     &:focus {
         border-color: #93ff80;
@@ -133,29 +149,55 @@ const PodcastAddForm = (props: Props) => {
     const [name, setName] = useState('')
     const [downloadLink, setDownloadLink] = useState('')
     const [date, setDate] = useState<Date>(new Date())
-
-
+    const [hint, setHint] = useState('')
     const [narrator, setNarrator] = useState<NarratorType | undefined>(undefined)
     const [source, setSource] = useState<string| undefined>(undefined)
 
+    const [isEdit , setisEdit] = useState(false)
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    let podcast: null | PodcastType = null
+    if(id){
+        podcast = usePodcastById(id)
+    }
+
+    useEffect(() => {
+        if(podcast){
+            setDescription(podcast.description.replace(/<br>/g,'\n'))
+            setImgUrl(podcast.imgUrl)
+            setName(podcast.name)
+            setDownloadLink(podcast.downloadLink)
+            setDate(podcast.postDate)
+            setHint(podcast.hint ? podcast.hint :'')
+            setNarrator(podcast.narrator)
+            setSource(podcast.source)
+        }
+    }, [podcast])
+ 
 
     useEffectOnce(() => {
         setNarrator(user)
     })
 
-    useEffectOnce(() => {
-        listPodcast()
-    })
 
     const onSubmitHandler = async (e: any) => {
-        const podcast: PodcastType = {
+        const podcastData: PodcastType = {
             source: source as string,
-            fileSize,
+            fileSize : fileSize < 0 ? (podcast ? podcast.fileSize : -1): fileSize ,
             narrator: narrator as NarratorType,
             postDate: date,
             description: description.replace(new RegExp('\n', 'g'), '<br>'),
             imgUrl,
-            name
+            name,
+            hint,
+            downloadLink
+        }
+
+        if(podcast){
+            editPodcast({...podcastData, id: podcast.id})
+        }else{
+            addPodcast(podcastData)
         }
         console.log('check podcast', podcast)
     }
@@ -168,9 +210,18 @@ const PodcastAddForm = (props: Props) => {
         <StyledWrapper>
 
             <StyledTitle>
-                <StyledBackToPodcastList>&larr; Back To Podcasts List</StyledBackToPodcastList>
+                <StyledBackToPodcastList onClick={()=>{
+                    AppRouterContext.ref.props.history.push('/')
+                }}>&larr; Back To Podcasts List</StyledBackToPodcastList>
                 <span>Add Weekly Podcast</span>
-                <div style={{ marginRight: '80px' }} />
+                {podcast ? <StyledDeletePodcast onClick={()=>{
+                    if(window.confirm('Are you sure to Delete this podcast')){
+                        deletePodcast(podcast as PodcastType)
+                    }
+                }}>
+                    <span>Delete This Podcast</span>
+                </StyledDeletePodcast>:  <div style={{ marginRight: '80px' }} />}
+               
             </StyledTitle>
 
             <StyledMainWrapper>
@@ -234,8 +285,15 @@ const PodcastAddForm = (props: Props) => {
                         <StyledLabel>Description</StyledLabel>
                         <StyledTextArea value={description}  onChange = {(e)=> setDescription(e.target.value)} />
                     </StyledInputControl>
+
                     <StyledInputControl>
-                        <StyledSubmitButton onClick={onSubmitHandler}><span>Add Podcast</span></StyledSubmitButton>
+                        <StyledLabel>Hint</StyledLabel>
+                        <StyledTextArea value={hint}  onChange = {(e)=> setHint(e.target.value)} />
+                    </StyledInputControl>
+                    <StyledInputControl>
+                        <StyledSubmitButton onClick={onSubmitHandler}>
+                            {podcast? <span>Edit Podcast</span>: <span>Add Podcast</span>}    
+                        </StyledSubmitButton>
 
                     </StyledInputControl>
                 </StyledSubWrapper>

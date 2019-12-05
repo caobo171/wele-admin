@@ -94,8 +94,13 @@ const SelectUser = (props: Props) => {
         }
     }
 
-    const onSelecHandle = (user: NarratorType) => {
-        props.onChange(user)
+    const onSelecHandle = (user: NarratorType | null) => {
+        if(user){
+            props.onChange(user)
+        }else{
+            setOption('me')
+        }
+      
         setAddUser(false)
     }
 
@@ -116,15 +121,44 @@ const SelectUser = (props: Props) => {
 
 }
 
-
-const StyledOkButton = styled.div`
+const StyledGroup = styled.div`
     width: 400px;
-    background-color: green;
-    text-align: center;
-    border-radius: 4px;
     height: 25px;
     color: #fff;
+    display: flex;
+    flex-direction: row;
+`
+
+const StyledOkButton = styled.div`
+    display: flex;
+    flex: 1;
+    background-color: green;
+    text-align: center;
+    border-radius: 6px;
+    height: 25px;
     cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    &:hover {
+        opacity: 0.7;
+    }
+`
+const StyledCancelButton = styled.div`
+    display: flex;
+    flex: 1;
+    background-color: red;
+    text-align: center;
+    border-radius: 6px;
+    height: 25px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
     &:hover {
         opacity: 0.7;
     }
@@ -146,7 +180,7 @@ const StyledLabel = styled.div`
 
 
 
-const AddAuthor = (props: { onSelecHandle: (user: NarratorType) => void }) => {
+const AddAuthor = (props: { onSelecHandle: (user: NarratorType | null) => void }) => {
     const [image, setImage] = useState('')
 
     const [text, setText] = useState('')
@@ -160,6 +194,10 @@ const AddAuthor = (props: { onSelecHandle: (user: NarratorType) => void }) => {
 
         props.onSelecHandle(narrator)
     }
+
+    const onCancelHandle = ()=>{
+        props.onSelecHandle(null)
+    }
     return <StyledWrapper>
         <StyledInputControl>
             <StyledLabel>Avatar</StyledLabel>
@@ -168,7 +206,11 @@ const AddAuthor = (props: { onSelecHandle: (user: NarratorType) => void }) => {
             <StyledLabel>Name</StyledLabel>
             <StyledTextInput onChange={(e) => setText(e.target.value)} value={text} />
         </StyledInputControl>
+        <StyledGroup>
         <StyledOkButton onClick={onClickHandle}>OK </StyledOkButton>
+        <StyledCancelButton onClick={onCancelHandle}>Cancel</StyledCancelButton>
+        </StyledGroup>
+    
 
         
     </StyledWrapper>

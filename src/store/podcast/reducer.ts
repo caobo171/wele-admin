@@ -20,3 +20,8 @@ export default createReducer<State, ActionType<typeof actions>>(initialState)
     const newList = action.payload
     return {listPodcasts: newList} 
 })
+.handleAction(actions.deletePodcast,(state, action)=>{
+    const newList = new Map(state.listPodcasts)
+    newList.delete(action.payload.id as string)
+    return {listPodcasts: newList} 
+})
