@@ -33,7 +33,11 @@ const RootRoute: React.FC<{
     const user = useUser()
     return <Route {...rest} render={props => {
         const Component = component;
-        return user && (user.role === 'root') ? <Component {...props} /> : <Redirect to={'/login'} />
+        if(user){
+            console.log('check user', user.role, user)
+        }
+       
+        return (user && user.role !== 'root') ? <Redirect to={'/login'} />: <Component {...props} /> 
         // return <Component {...props} />
     }} />
 }

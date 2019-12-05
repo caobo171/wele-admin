@@ -13,11 +13,10 @@ const getCurrentUserAsync = (id:string) => {
     return new Promise((resolve, reject) => {
       const ref = firebase.database().ref(`/users/${id}`);
       ref.once('value', async (snapshot: any) => {
-
-        if(!snapshot || !snapshot._snapshot){
+        if(!snapshot){
             resolve(null)
         }else{
-            const user: User = {id: id , ...snapshot._snapshot.value}
+            const user: User = {id: id , ...snapshot.val()}
             resolve(user)
         }
   
@@ -38,6 +37,8 @@ export const login = async ( storex = store)=>{
         } 
 
         const userData : any = await getCurrentUserAsync(user.id)
+
+        console.log('check userData')
         if(userData){
             await localStorage.setItem(CURRENT_USER_STORAGE_KEY, JSON.stringify(userData))
             return storex.dispatch(actions.login(userData))
@@ -59,6 +60,7 @@ export const getUser = async (storex = store)=>{
 
         const user: User = JSON.parse(res)
         const userData : any = await getCurrentUserAsync(user.id)
+        console.log('check userdata', userData)
         if(userData){
             return storex.dispatch(actions.login(userData))        
         }else{

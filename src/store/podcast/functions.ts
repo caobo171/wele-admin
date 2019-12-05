@@ -7,15 +7,34 @@ import { PodcastType } from './types'
 import { idText } from 'typescript'
 import { toast } from 'react-toastify'
 import { AppRouterContext } from '@/navigation/AppRouter'
+import { NarratorType } from '@/components/SelecUser'
 
 
 const PODCAST_COLLECTION = 'podcasts'
+const NOTIFICATIONS_COLLECTION = 'notifications'
+
+interface Notification{
+    imgUrl: string,
+    message: string,
+    sender: NarratorType,
+    time: Date,
+    title: string,
+    type: 'weekly_podcast' | 'unknown'
+}
 
 export const addPodcast = async (podcast: PodcastType, storex = store) => {
 
     const res = await firebase.firestore().collection(PODCAST_COLLECTION).add(podcast)
 
-
+    const noti: Notification={
+        imgUrl: podcast.narrator.photoURL as string,
+        message: `${podcast.name} ESL is posted !! Let listen <3 <3`,
+        sender:podcast.narrator,
+        time: podcast.postDate,
+        title: 'Weekly Podcast',
+        type: 'weekly_podcast'
+    }
+    await firebase.firestore().collection(NOTIFICATIONS_COLLECTION).add(noti)
 
     if (res) {
         toast.success('Podcast Added Successful !!')

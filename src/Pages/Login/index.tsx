@@ -30,7 +30,7 @@ const StyledBrandImage = styled.img`
 `
 
 const StyledFacebookLoginButton = styled.div`
-    width: 376px;
+    width: 405px;
     height: 60px;
     font-size: 24px;
     font-weight: bold;
