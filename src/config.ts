@@ -8,13 +8,8 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/database";
+import { FIREBASE_CONFIG } from "./env";
 
-
-
-// TODO: Replace the following with your app's Firebase project configuration
-const firebaseConfig = {
-
-};
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(FIREBASE_CONFIG);

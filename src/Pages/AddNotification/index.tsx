@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-import PodcastType from 'models/Podcast'
-import uuid from 'uuid';
 import * as firebase from 'firebase/app'
-
 import { toast } from 'react-toastify'
-
 import { useEffectOnce } from "react-use"
-import NotificationType from 'models/Notification';
+import { listPodcast } from '@store/podcast/functions';
 
 interface Props {
     user: any
@@ -38,58 +34,16 @@ const PodcastAddForm = (props: Props) => {
 
 
     useEffectOnce(() => {
-        (async () => {
-            const snapshot = await firebase.firestore().collection('podcasts').get()
-            console.log('check snapshot', snapshot)
-        })()
 
+        listPodcast()
     })
 
     const onSubmitHandler = async (e: any) => {
-        e.preventDefault()
-        if (props.user) {
-            const podcast: PodcastType = {
-                source,
-                fileSize,
-                narrator: props.user,
-                postDate: new Date(),
-                description: description.replace(new RegExp('\n', 'g'), '<br>'),
-                imgUrl,
-                name
-            }
-
-            await firebase.firestore().collection('podcasts').add(podcast)
-
-            const notification: NotificationType = {
-                imgUrl: 'https://static.wixstatic.com/media/29b9a8_05dd638ec28a4b26826c557f0bc92d7f~mv2.jpg/v1/fit/w_2500,h_1330,al_c/29b9a8_05dd638ec28a4b26826c557f0bc92d7f~mv2.jpg',
-                message: `Wele has posted ${podcast.name} , Let's start listening !! `,
-                sender: props.user,
-                time: new Date(),
-                title: 'Podcast This Week',
-                type: 'weekly_podcast'
-            }
-            await firebase.firestore().collection('notifications').add(notification)
-            await toast.success('ADD SUCCESSFULLY !! ')
-        } else {
-            toast.error("YOUR ARE NOT LOGGINED ")
-        }
     }
 
 
     const onSubmitNotificationHandler = async (e: any) => {
-        e.preventDefault()
-        const notification: NotificationType = {
-            imgUrl: notificationImage,
-            message: notificationMessage,
-            sender: props.user,
-            time: new Date(),
-            title: notificationTitle,
-            type: notificationType
-        }
-        await firebase.firestore().collection('notifications').add(notification)
-        await toast.success('ADD SUCCESSFULLY !! ')
 
-        console.log('check notification', notification)
     }
     return (
         <div className="row">

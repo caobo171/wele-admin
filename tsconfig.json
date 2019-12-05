@@ -4,7 +4,21 @@
     "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
+    "paths":{
+      "@/*": [
+        "src/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@pages/*":[
+        "src/pages/*"
+      ]
+    },
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -13,19 +27,12 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": true,
+    "types": ["react", "jest"],
     "jsx": "preserve",
     "lib": [
       "es2018",
       "dom",
       "esnext.asynciterable"
     ]
-  },
-  "include": [
-    "src",
-    "./src/*",
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  }
 }
