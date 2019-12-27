@@ -161,7 +161,6 @@ const PodcastAddForm = (props: Props) => {
     if(id){
         podcast = usePodcastById(id)
     }
-
     useEffect(() => {
         if(podcast){
             setDescription(podcast.description.replace(/<br>/g,'\n'))
@@ -177,7 +176,9 @@ const PodcastAddForm = (props: Props) => {
  
 
     useEffectOnce(() => {
-        setNarrator(user)
+        if(!id){
+            setNarrator(user)
+        }  
     })
 
 
@@ -199,7 +200,6 @@ const PodcastAddForm = (props: Props) => {
         }else{
             addPodcast(podcastData)
         }
-        console.log('check podcast', podcast)
     }
 
 

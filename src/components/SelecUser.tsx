@@ -10,10 +10,6 @@ interface OptionType {
     value: any
 }
 
-interface Props {
-    onChange: (value: NarratorType | undefined) => void,
-    value: NarratorType | undefined
-}
 
 const StyledSelect = styled.select`
     border-radius: 4px;
@@ -66,6 +62,7 @@ const StyledAvatar = styled.img`
     height: 60px;
 `
 
+
 const StyledNarratorName = styled.div`
     margin-left: 8px;
     font-weight: 500;
@@ -77,10 +74,13 @@ export interface NarratorType {
     uid?: string
 }
 
+interface Props {
+    onChange: (value: NarratorType | undefined) => void,
+    value: NarratorType | undefined
+}
 
 
-
-const SelectUser = (props: Props) => {
+const SelectUser = React.memo((props: Props) => {
     const [option, setOption] = useState<'me' | 'another'>('me')
     const [IsAddUser, setAddUser ] = useState(false)
 
@@ -93,6 +93,8 @@ const SelectUser = (props: Props) => {
             setAddUser(true)
         }
     }
+
+    console.log('check props', props)
 
     const onSelecHandle = (user: NarratorType | null) => {
         if(user){
@@ -119,7 +121,7 @@ const SelectUser = (props: Props) => {
         </StyledUserInfo>
     </StyledSelectUserWrapper>
 
-}
+},(prev, next) => false)
 
 const StyledGroup = styled.div`
     width: 400px;

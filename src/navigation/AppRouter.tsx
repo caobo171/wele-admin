@@ -88,9 +88,9 @@ const AppRouter = () => {
             <RouterContext>
                 <Switch>
                     <Route path={'/login'} component={Login} />
-                    <PrivateRoute path={'/add'} component={AddPodcast} />
+                    <Route path={'/add'} component={AddPodcast} />
                     <RootRoute path={'/userlist'} component={UserList} />
-                    <PrivateRoute path={'/'} component={PodcastList} />      
+                    <Route path={'/'} component={PodcastList} />      
                 </Switch>
             </RouterContext>
         </Router>
