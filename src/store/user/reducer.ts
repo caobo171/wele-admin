@@ -18,6 +18,7 @@ export default createReducer<State, ActionType<typeof actions>>(initialState)
         ...state,
         listUser: action.payload
     }))
+    
     .handleAction(actions.updateUserRole, (state, action) => {
 
         const newList = state.listUser.set(action.payload.id, action.payload)

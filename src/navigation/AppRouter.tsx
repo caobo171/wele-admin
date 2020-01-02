@@ -1,10 +1,9 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect, RouteComponentProps, withRouter } from 'react-router-dom'
 import Login from '@/Pages/Login'
 import AddPodcast from '@/Pages/AddPodcast'
 import { useUser } from '@/store/user/hooks'
-import { ReactComponent } from '*.svg'
 import PodcastList from '@/Pages/PodcastList'
 import { useEffectOnce } from 'react-use'
 import { getPodcasts } from '@/store/podcast/functions'
@@ -20,8 +19,10 @@ const PrivateRoute: React.FC<{
     const user = useUser()
     return <Route {...rest} render={props => {
         const Component = component;
+
+        console.log(user && (user.role === 'admin' || user.role === 'root'), user)
         return user && (user.role === 'admin' || user.role === 'root') ? <Component {...props} /> : <Redirect to={'/login'} />
-        // return <Component {...props} />
+        return <Component {...props} />
     }} />
 }
 
@@ -33,11 +34,11 @@ const RootRoute: React.FC<{
     const user = useUser()
     return <Route {...rest} render={props => {
         const Component = component;
-        if(user){
+        if (user) {
             console.log('check user', user.role, user)
         }
-       
-        return (user && user.role !== 'root') ? <Redirect to={'/login'} />: <Component {...props} /> 
+
+        return (user && user.role !== 'root') ? <Redirect to={'/login'} /> : <Component {...props} />
         // return <Component {...props} />
     }} />
 }
@@ -49,7 +50,7 @@ export const AppRouterContext: React.Context<{}> & {
 } = React.createContext<{}>({});
 
 
-class RouterContext extends React.Component{
+class RouterContext extends React.Component {
 
     constructor(props: RouteComponentProps) {
         super(props);
@@ -78,20 +79,34 @@ window.router = AppRouterContext
 
 const AppRouter = () => {
 
-    useEffectOnce(()=>{
-        getPodcasts()
-        getUser()
+    const [isFullyLoaded, setFullyLoaded] = useState(false)
+
+    useEffectOnce(() => {
+        (async () => {
+            await getPodcasts()
+            await getUser()
+
+
+
+            await setFullyLoaded(true)
+        })()
     })
 
     return (
         <Router>
             <RouterContext>
-                <Switch>
-                    <Route path={'/login'} component={Login} />
-                    <Route path={'/add'} component={AddPodcast} />
-                    <RootRoute path={'/userlist'} component={UserList} />
-                    <Route path={'/'} component={PodcastList} />      
-                </Switch>
+                {
+                    isFullyLoaded ?
+                        // <div>Test</div>
+                        <Switch>
+                            <Route path={'/login'} component={Login} />
+                            <PrivateRoute path={'/add'} component={AddPodcast} />
+                            <Route path={'/userlist'} component={UserList} />
+                            <PrivateRoute path={'/'} component={PodcastList} />
+                        </Switch>
+                        : <div></div>
+                }
+
             </RouterContext>
         </Router>
     )

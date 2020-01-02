@@ -72,7 +72,7 @@ const Login = () => {
 
 
     useEffect(() => {
-        if (user) {
+        if ((user && (user.role === 'admin' || user.role === 'root'))) {
             AppRouterContext.ref && AppRouterContext.ref.props.history.push('/')
         }
     }, [user])
