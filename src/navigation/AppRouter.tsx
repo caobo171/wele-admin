@@ -9,7 +9,7 @@ import { useEffectOnce } from 'react-use'
 import { getPodcasts } from '@/store/podcast/functions'
 import { getUser } from '@/store/user/functions'
 import UserList from '@/Pages/UserList'
-
+import Test from '@/Pages/Test'
 
 
 const PrivateRoute: React.FC<{
@@ -102,6 +102,7 @@ const AppRouter = () => {
                             <Route path={'/login'} component={Login} />
                             <PrivateRoute path={'/add'} component={AddPodcast} />
                             <Route path={'/userlist'} component={UserList} />
+                            <Route path={'/test'} component={Test} />
                             <PrivateRoute path={'/'} component={PodcastList} />
                         </Switch>
                         : <div></div>
