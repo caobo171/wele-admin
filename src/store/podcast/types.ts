@@ -10,7 +10,8 @@ export interface PodcastType{
     fileSize: number,
     downloadLink: string,
     id?: string,
-    hint?:string
+    hint?:string,
+    result?: string
 }
 
 export interface State {

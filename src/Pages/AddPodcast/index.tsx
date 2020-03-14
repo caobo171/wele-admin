@@ -58,7 +58,7 @@ const StyledDeletePodcast = styled.div`
 `
 
 const StyledMainWrapper = styled.div`
-    width: 80%;
+    width: 94%;
     margin: auto;
     display: flex;
     flex-direction: row;
@@ -154,6 +154,7 @@ const PodcastAddForm = (props: Props) => {
     const [source, setSource] = useState<string| undefined>(undefined)
 
     const [isEdit , setisEdit] = useState(false)
+    const [result, setResult] = useState('')
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
@@ -171,6 +172,7 @@ const PodcastAddForm = (props: Props) => {
             setHint(podcast.hint ? podcast.hint :'')
             setNarrator(podcast.narrator)
             setSource(podcast.source)
+            setResult(podcast.result ? podcast.result : '')
         }
     }, [podcast])
  
@@ -192,7 +194,8 @@ const PodcastAddForm = (props: Props) => {
             imgUrl,
             name,
             hint,
-            downloadLink
+            downloadLink,
+            result
         }
 
         if(podcast){
@@ -289,6 +292,11 @@ const PodcastAddForm = (props: Props) => {
                     <StyledInputControl>
                         <StyledLabel>Hint</StyledLabel>
                         <StyledTextArea value={hint}  onChange = {(e)=> setHint(e.target.value)} />
+                    </StyledInputControl>
+
+                    <StyledInputControl>
+                        <StyledLabel>Result</StyledLabel>
+                        <StyledTextArea value={result}  onChange = {(e)=> setResult(e.target.value)} />
                     </StyledInputControl>
                     <StyledInputControl>
                         <StyledSubmitButton onClick={onSubmitHandler}>
