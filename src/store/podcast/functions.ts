@@ -30,7 +30,7 @@ export const addPodcast = async (podcast: PodcastType, storex = store) => {
         imgUrl: podcast.narrator.photoURL as string,
         message: `${podcast.name} ESL is posted !! Let listen <3 <3`,
         sender:podcast.narrator,
-        time: podcast.postDate,
+        time: new Date(podcast.postDate),
         title: 'Weekly Podcast',
         type: 'weekly_podcast'
     }
@@ -48,7 +48,7 @@ export const getPodcasts = async (storex = store) => {
     const querySnapshots = await firebase.firestore().collection(PODCAST_COLLECTION).get()
     let data = new Map<string, PodcastType>()
     querySnapshots.forEach((doc: any) => {
-        data = data.set(doc.id, { id: doc.id, ...doc.data(), postDate: new Date(doc.data().postDate.seconds * 1000) })
+        data = data.set(doc.id, { id: doc.id, ...doc.data() })
     });
 
     return await storex.dispatch(actions.getPodcasts(data))

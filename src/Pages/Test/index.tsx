@@ -9,6 +9,7 @@ const Test = () => {
 
     const onSubmitHandle = async () => {
 
+
         let isLast = false
         let resultString = ''
         let i = 0
@@ -17,7 +18,7 @@ const Test = () => {
             if (file) {
                 formData.append('file', file)
             }
-            formData.append('transcript', text)
+            formData.append('transcript', text.replace(/-\n-/g,'- -'))
             formData.append('offset', i.toString())
             formData.append('chunk_duration', '5')
             formData.append('chunks', '10')

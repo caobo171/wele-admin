@@ -5,7 +5,7 @@ export interface PodcastType{
     imgUrl: string,
     name: string,
     narrator: NarratorType,
-    postDate: Date,
+    postDate: number,
     description: string,
     fileSize: number,
     downloadLink: string,

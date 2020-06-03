@@ -128,10 +128,14 @@ const StyledSubmitButton = styled.div`
 const SOURCE_OPTIONS = [
     { name: 'Spotlight English', value: 'Spotlight English' },
     { name: '6 minutes English ', value: '6 minutes English' },
-    { name: 'Deep English', value: 'Deep English' }
+    { name: 'Deep English', value: 'Deep English' },
+    { name: 'NewsUSA', value: 'NewsUSA' }
 ]
 
-const formatDate = (time: Date)=>{
+const formatDate = (timeNumber: number)=>{
+
+    console.log(formatDate);
+    const time = new Date(timeNumber);
     const date = time.getDate().toString().padStart(2,'0')
     const month = (time.getMonth() + 1).toString().padStart(2,'0')
     const year = time.getFullYear()
@@ -148,7 +152,7 @@ const PodcastAddForm = (props: Props) => {
     const [imgUrl, setImgUrl] = useState('')
     const [name, setName] = useState('')
     const [downloadLink, setDownloadLink] = useState('')
-    const [date, setDate] = useState<Date>(new Date())
+    const [date, setDate] = useState<number>(0)
     const [hint, setHint] = useState('')
     const [narrator, setNarrator] = useState<NarratorType | undefined>(undefined)
     const [source, setSource] = useState<string| undefined>(undefined)
@@ -277,7 +281,7 @@ const PodcastAddForm = (props: Props) => {
                         onChange={(e)=> {
                             let d = new Date(e.target.value)
                             d.setHours(22)
-                            setDate(d)
+                            setDate(d.getTime())
                         }} />
                     </StyledInputControl>
                 </StyledSubWrapper>
