@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { usePodcastList } from '@/store/podcast/hooks'
 import { useEffectOnce } from 'react-use'
 import { getPodcasts } from '@/store/podcast/functions'
 import PodcastItem from './PodcastItem'
-import  { AppRouterContext } from '@/navigation/AppRouter'
+import { AppRouterContext } from '@/navigation/AppRouter'
+import { Row, Jumbotron, Button, InputGroup, FormControl } from 'react-bootstrap';
 
 
 const StyledWrapper = styled.div`
     width: 80%;
     margin: auto;
-
-
 `
 
 const StyledPodcastSession = styled.div`
@@ -43,23 +42,44 @@ const StyledGoToAddDashboard = styled.div`
 `
 
 const PodcastList = () => {
-
-    const podcasts = usePodcastList()
-
+    const [filter, setFilter] = useState('');
+    const podcasts = usePodcastList();
+    const filterdPodcasts = useMemo(() => {
+        if (filter === '') {
+            return podcasts;
+        } else {
+            return podcasts.filter(e => {
+                return e.name.toLowerCase().indexOf(filter.toLowerCase()) >= 0
+            });
+        }
+    }, [podcasts, filter])
+    console.log(podcasts);
     return (
-        <StyledWrapper>
-            <StyledGoToAddDashboard onClick={()=>{
-                AppRouterContext.ref.props.history.push('/add')
-            }}>
-                <span>Add New Podcast </span>
-            </StyledGoToAddDashboard>
-            <StyledPodcastSession>
-                {
-                    podcasts.map(podcast => <PodcastItem key={podcast.id} podcast={podcast} />)
-                }
-            </StyledPodcastSession>
+        <>
+            <div className="container">
+                <Jumbotron className={'py-4 mt-4'}>
+                    <p>
+                        <span style={{fontWeight: 500, fontSize: 24}}>Filter Podcast</span>
+                        <Button className="float-right" onClick={() => {
+                            AppRouterContext.ref.props.history.push('/add')
+                        }} variant="primary">Add Podcast</Button>
+                    </p>
 
-        </StyledWrapper>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            value={filter}
+                            placeholder="Type podcast name..."
+                            onChange={(e) => setFilter(e.target.value)}
+                        />
+                    </InputGroup>
+                </Jumbotron>
+                <Row>
+                    {
+                        filterdPodcasts.map(podcast => <PodcastItem key={podcast.id} podcast={podcast} />)
+                    }
+                </Row>
+            </div>
+        </>
     )
 }
 

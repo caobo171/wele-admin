@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
+import {Figure , Form} from 'react-bootstrap';
+
 const StyledWrapper = styled.div`
     display: flex;
     width: 400px;
@@ -40,13 +42,13 @@ const SelectImage = (props: Props)=>{
     const onChangeHandler = (e: any)=>{
         props.onChange(e.target.value)
     }
-    return <StyledWrapper>
-        <StyledTextInput value={props.value} onChange = {onChangeHandler}/>
-        <StyledImageWrapper>
-        <StyledImage src={props.value}/>
-        </StyledImageWrapper>
-        
-    </StyledWrapper>
+    return <>
+        <Form.Control value={props.value} onChange = {onChangeHandler} placeholder='Image link'/>
+        <Figure>
+            <Figure.Image src={props.value}>
+            </Figure.Image>
+        </Figure>        
+    </>
 }
 
 export default SelectImage

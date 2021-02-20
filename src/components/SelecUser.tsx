@@ -3,6 +3,7 @@ import styled from 'styled-components/macro'
 import { useUser } from '@/store/user/hooks'
 import { User } from '@/store/user/types'
 import SelectImage from './SelectImage'
+import { Form } from 'react-bootstrap'
 
 
 interface OptionType {
@@ -68,8 +69,8 @@ const StyledNarratorName = styled.div`
     font-weight: 500;
 `
 export interface NarratorType {
-    displayName: string | null ,
-    photoURL: string | null ,
+    displayName: string | null,
+    photoURL: string | null,
     email: string | null,
     uid?: string
 }
@@ -81,47 +82,31 @@ interface Props {
 
 
 const SelectUser = React.memo((props: Props) => {
-    const [option, setOption] = useState<'me' | 'another'>('me')
-    const [IsAddUser, setAddUser ] = useState(false)
-
-    const user = useUser()
     const onChangeHandle = (e: any) => {
-        setOption(e.target.value)
-        if (e.target.value === 'me') {
-            props.onChange(user)
-        }else{
-            setAddUser(true)
-        }
+        let result: NarratorType = {
+            ...props.value as NarratorType,
+            [e.target.name]: e.target.value,
+            email: ''
+        };
+        props.onChange(result);
     }
 
-    console.log('check props', props)
+    return <>
+        <Form.Group>
+            <Form.Label>Narrator Name</Form.Label>
 
-    const onSelecHandle = (user: NarratorType | null) => {
-        if(user){
-            props.onChange(user)
-        }else{
-            setOption('me')
-        }
-      
-        setAddUser(false)
-    }
+            <Form.Control name="displayName" value={props.value ? (props.value.displayName || '') : ''} onChange={onChangeHandle}>
+            </Form.Control>
+        </Form.Group>
+        <Form.Group>
+            <Form.Label>Narrator Avatar</Form.Label>
+            <Form.Control name="photoURL" value={props.value ? (props.value.photoURL || '') : ''} onChange={onChangeHandle}>
+            </Form.Control>
+            <StyledAvatar src={props.value && props.value.photoURL ? props.value.photoURL : ''} />
+        </Form.Group>
+    </>
 
-
-    return <StyledSelectUserWrapper>
-        { (option === 'another') && IsAddUser ? <AddAuthor onSelecHandle={onSelecHandle} />:
-        <StyledSelect value={option} onChange={onChangeHandle}>
-            <option value={undefined}> Choose an option ...</option>
-            <option value={'me'}> Me</option>
-            <option value={'another'}> Another</option>
-        </StyledSelect>}
-
-        <StyledUserInfo>
-            <StyledAvatar src ={props.value && props.value.photoURL ? props.value.photoURL: ''}/>
-            <StyledNarratorName>{props.value ? props.value.displayName:'undefined'}</StyledNarratorName>
-        </StyledUserInfo>
-    </StyledSelectUserWrapper>
-
-},(prev, next) => false)
+}, (prev, next) => false)
 
 const StyledGroup = styled.div`
     width: 400px;
@@ -187,8 +172,8 @@ const AddAuthor = (props: { onSelecHandle: (user: NarratorType | null) => void }
 
     const [text, setText] = useState('')
 
-    const onClickHandle = ()=>{
-        const narrator : NarratorType = {
+    const onClickHandle = () => {
+        const narrator: NarratorType = {
             photoURL: image,
             displayName: text,
             email: null
@@ -197,7 +182,7 @@ const AddAuthor = (props: { onSelecHandle: (user: NarratorType | null) => void }
         props.onSelecHandle(narrator)
     }
 
-    const onCancelHandle = ()=>{
+    const onCancelHandle = () => {
         props.onSelecHandle(null)
     }
     return <StyledWrapper>
@@ -209,12 +194,12 @@ const AddAuthor = (props: { onSelecHandle: (user: NarratorType | null) => void }
             <StyledTextInput onChange={(e) => setText(e.target.value)} value={text} />
         </StyledInputControl>
         <StyledGroup>
-        <StyledOkButton onClick={onClickHandle}>OK </StyledOkButton>
-        <StyledCancelButton onClick={onCancelHandle}>Cancel</StyledCancelButton>
+            <StyledOkButton onClick={onClickHandle}>OK </StyledOkButton>
+            <StyledCancelButton onClick={onCancelHandle}>Cancel</StyledCancelButton>
         </StyledGroup>
-    
 
-        
+
+
     </StyledWrapper>
 }
 

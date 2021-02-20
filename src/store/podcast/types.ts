@@ -11,7 +11,8 @@ export interface PodcastType{
     downloadLink: string,
     id?: string,
     hint?:string,
-    result?: string
+    result?: string,
+    order: number
 }
 
 export interface State {

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2018",
     "allowJs": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths":{
@@ -27,7 +27,7 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "noEmit": true,
-    "types": ["react", "jest"],
+    "types": ["react", "jest", "node"],
     "jsx": "preserve",
     "lib": [
       "es2018",
