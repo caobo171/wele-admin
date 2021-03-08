@@ -76,6 +76,10 @@ const PodcastAddForm = (props: Props) => {
             window.alert('Please enter the audio file')
             return ;
         };
+
+        //@ts-ignore
+        const path = process.env.NODE_ENV !== "production" ? '' : 'https://admin-wele.herokuapp.com/'
+
         let isLast = false;
         let result: String[] = [];
         let time_stamps: number[] = [];
@@ -91,7 +95,7 @@ const PodcastAddForm = (props: Props) => {
             formData.append('chunks', '10');
 
 
-            const res = await axios.post('api/file',
+            const res = await axios.post(path + 'api/file',
                 formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
