@@ -32,7 +32,7 @@ const PodcastAddForm = (props: Props) => {
 
     const user = useUser()
     const [description, setDescription] = useState('')
-    const [process, setProcess] = useState(10)
+    const [process_num, setProcess] = useState(10)
     const [file, setFile] = useState<File | null>(null)
     const [imgUrl, setImgUrl] = useState('')
     const [name, setName] = useState('')
@@ -76,14 +76,16 @@ const PodcastAddForm = (props: Props) => {
             window.alert('Please enter the audio file')
             return ;
         };
+        console.log('aaaaaa');
 
-        //@ts-ignore
-        const path = process.env.NODE_ENV !== "production" ? '' : 'https://admin-wele.herokuapp.com/'
+
+        const path = process.env.NODE_ENV !== "production" ? '' : 'https://admin-wele.herokuapp.com/';
 
         let isLast = false;
         let result: String[] = [];
         let time_stamps: number[] = [];
         let i = 0;
+        console.log('bbbb');
         while (!isLast) {
             const formData = new FormData()
             if (file) {
@@ -118,7 +120,7 @@ const PodcastAddForm = (props: Props) => {
                 setResult(full);
                 return true;
             }
-
+            console.log('ccccc');
         }
     }, [file, originScript]);
 
@@ -240,7 +242,7 @@ const PodcastAddForm = (props: Props) => {
                 state.loading ? (
                     <>
                     <Spinner animation="border" />
-                    <Form.Text>Generating Hint and Result ..  {process}% </Form.Text>
+                    <Form.Text>Generating Hint and Result ..  {process_num}% </Form.Text>
                     </>
                 ) : (
                     <>
